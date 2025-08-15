@@ -106,46 +106,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Converters
 function aobToCpp(aob) {
-  return aob.trim().split(/\s+/).map(p=>p==="??"?"'?','?'":"0x"+p.toUpperCase()).join(", ");
+  return aob.trim().split(/\s+/).map(p => p === "??" ? "'?'" : "0x" + p.toUpperCase()).join(", ");
 }
 function aobToPython(aob) {
-  return aob.trim().split(/\s+/).map(p=>p==="??"?".":"\\x"+p.toUpperCase()).join("");
+  return aob.trim().split(/\s+/).map(p => p === "??" ? "." : "\\x" + p.toUpperCase()).join("");
 }
-
-// **Updated C++ to C#**
 function cppToCs(aob) {
-  return aob
-    .replace(/[{};]/g,"")
-    .split(/,|\s+/)
-    .filter(Boolean)
-    .map(p => {
-      p = p.replace(/0x/gi,"").trim();
-      return p==="??" || p==="'?'" || p==="'?','?'" ? "??" : p.toUpperCase();
-    })
-    .join(" ");
+  return aob.replace(/[{};]/g,"").split(/,|\s+/).filter(Boolean).map(p => {
+    p = p.replace(/0x/gi,"").trim();
+    return p === "??" || p === "'?'" ? "??" : p.toUpperCase();
+  }).join(" ");
 }
-
-// **Updated C++ to Python**
 function cppToPython(aob) {
-  return aob
-    .replace(/[{};]/g,"")
-    .split(/,|\s+/)
-    .filter(Boolean)
-    .map(p=>{
-      p = p.trim();
-      if(p==="??" || p==="'?'" || p==="'?','?'") return ".";
-      p = p.replace(/0x/gi,"").toUpperCase();
-      return "\\x"+p;
-    })
-    .join("");
+  return aob.replace(/[{};]/g,"").split(/,|\s+/).filter(Boolean).map(p => {
+    p = p.trim();
+    if(p === "??" || p === "'?'") return ".";
+    return "\\x" + p.replace(/0x/gi,"").toUpperCase();
+  }).join("");
 }
-
 function csToCpp(aob) { return "{ " + aobToCpp(aob) + " };"; }
 function csToPython(aob) { return aobToPython(aob); }
-function pyToCs(aob) { return "byte[] aob = { " + aob.replace(/'/g,"").split(/\\x|(?=\.)/).filter(Boolean).map(p=>p==="."?"??":p.toUpperCase()).join(" ") + " };"; }
-function pyToCpp(aob) { return "{ " + aob.replace(/'/g,"").split(/\\x|(?=\.)/).filter(Boolean).map(p=>p==="."?"'?','?'":"0x"+p.toUpperCase()).join(", ") + " };"; }
+function pyToCs(aob) { return "byte[] aob = { " + aob.replace(/'/g,"").split(/\\x|(?=\.)/).filter(Boolean).map(p => p==="."?"??":p.toUpperCase()).join(" ") + " };"; }
+function pyToCpp(aob) { return "{ " + aob.replace(/'/g,"").split(/\\x|(?=\.)/).filter(Boolean).map(p => p==="."?"'?'" : "0x"+p.toUpperCase()).join(", ") + " };"; }
 
-// Link converters
+// Link converters to UI
 document.querySelectorAll(".card").forEach(card=>{
   const input = card.querySelector("input");
   const pre = card.querySelector("pre");
