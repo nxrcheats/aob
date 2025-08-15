@@ -23,8 +23,8 @@ h1.top-name {color:#00bbff;text-shadow:0 0 10px #00bbff;font-size:50px;text-alig
 .card input{width:100%;padding:16px;border:1px solid #00bbff;border-radius:10px;background:#000;color:#00bbff;font-size:18px;margin-bottom:15px;box-shadow:0 0 20px #00bbff;}
 .byte-count{font-size:18px;color:#00bbff;text-shadow:0 0 6px #00bbff;margin-bottom:15px;}
 pre{padding:16px;border:1px solid #00bbff;border-radius:10px;background:#000;color:#00bbff;font-size:16px;overflow-x:auto;white-space:pre-wrap;box-shadow:0 0 20px #00bbff;min-height:50px;}
-button.copy.bottom{margin:15px auto 0;background:#00bbff;color:#000;border:none;border-radius:6px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px #00bbff;padding:10px 40px;}
-button.copy.bottom:hover{background:#00aadd;}
+button.copy.bottom, button.delete.bottom{margin:15px 10px 0;display:inline-block;background:#00bbff;color:#000;border:none;border-radius:6px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px #00bbff;padding:10px 40px;}
+button.copy.bottom:hover, button.delete.bottom:hover{background:#00aadd;}
 .footer{text-align:center;font-size:18px;color:#00bbff;text-shadow:0 0 10px #00bbff;margin:20px 0;}
 </style>
 </head>
@@ -45,12 +45,14 @@ button.copy.bottom:hover{background:#00aadd;}
 
 <div id="particles-js"></div>
 
+<!-- Cards -->
 <div class="card" id="cs-cpp">
   <h1>C# TO C++</h1>
   <input type="text" placeholder="Paste AOB..." />
   <div class="byte-count">BYTE COUNT: 0</div>
   <pre></pre>
   <button class="copy bottom">COPY</button>
+  <button class="delete bottom">DELETE</button>
 </div>
 
 <div class="card" id="cs-py">
@@ -59,6 +61,7 @@ button.copy.bottom:hover{background:#00aadd;}
   <div class="byte-count">BYTE COUNT: 0</div>
   <pre></pre>
   <button class="copy bottom">COPY</button>
+  <button class="delete bottom">DELETE</button>
 </div>
 
 <div class="card" id="cpp-cs">
@@ -67,6 +70,7 @@ button.copy.bottom:hover{background:#00aadd;}
   <div class="byte-count">BYTE COUNT: 0</div>
   <pre></pre>
   <button class="copy bottom">COPY</button>
+  <button class="delete bottom">DELETE</button>
 </div>
 
 <div class="card" id="cpp-py">
@@ -75,6 +79,7 @@ button.copy.bottom:hover{background:#00aadd;}
   <div class="byte-count">BYTE COUNT: 0</div>
   <pre></pre>
   <button class="copy bottom">COPY</button>
+  <button class="delete bottom">DELETE</button>
 </div>
 
 <div class="card" id="py-cs">
@@ -83,6 +88,7 @@ button.copy.bottom:hover{background:#00aadd;}
   <div class="byte-count">BYTE COUNT: 0</div>
   <pre></pre>
   <button class="copy bottom">COPY</button>
+  <button class="delete bottom">DELETE</button>
 </div>
 
 <div class="card" id="py-cpp">
@@ -91,6 +97,7 @@ button.copy.bottom:hover{background:#00aadd;}
   <div class="byte-count">BYTE COUNT: 0</div>
   <pre></pre>
   <button class="copy bottom">COPY</button>
+  <button class="delete bottom">DELETE</button>
 </div>
 
 <div class="footer">Developed by NXR OVI</div>
@@ -134,7 +141,8 @@ document.querySelectorAll(".card").forEach(card=>{
   const input = card.querySelector("input");
   const pre = card.querySelector("pre");
   const count = card.querySelector(".byte-count");
-  const btn = card.querySelector("button.copy");
+  const copyBtn = card.querySelector("button.copy");
+  const deleteBtn = card.querySelector("button.delete");
 
   input.addEventListener("input", ()=>{
     const val = input.value.trim();
@@ -153,7 +161,13 @@ document.querySelectorAll(".card").forEach(card=>{
     pre.textContent = output;
   });
 
-  btn.addEventListener("click", ()=>navigator.clipboard.writeText(pre.textContent));
+  copyBtn.addEventListener("click", ()=>navigator.clipboard.writeText(pre.textContent));
+
+  deleteBtn.addEventListener("click", ()=>{
+    input.value = "";
+    pre.textContent = "";
+    count.textContent = "BYTE COUNT: 0";
+  });
 });
 
 // Dropdown
